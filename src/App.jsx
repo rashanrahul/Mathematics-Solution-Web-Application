@@ -1,341 +1,358 @@
-import { useEffect, useState } from 'react'
-import { ArrowDown, ArrowRight, Check, ChevronDown, CircleHelp, Clock3, Divide, Equal, FunctionSquare, Hash, ImagePlus, Languages, LoaderCircle, Percent, Plus, RectangleHorizontal, RotateCcw, Shapes, Sigma, Sparkles, Triangle, X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { ArrowRight, Check, ChevronDown, ImagePlus, Languages, LoaderCircle, RotateCcw, Sparkles, X, AlertCircle, BookOpen, Sigma } from 'lucide-react'
 
-const topics = [
-  { id: 'auto', label: 'Auto detect', labelSi: 'ස්වයංක්රීයව හඳුනාගන්න', icon: Sparkles },
-  { id: 'algebra', label: 'Algebra', labelSi: 'වීජ ගණිතය', icon: FunctionSquare },
-  { id: 'quadratic', label: 'Quadratic', labelSi: 'ද්විමූල සමීකරණ', icon: FunctionSquare },
-  { id: 'circles', label: 'Circle area', labelSi: 'වෘත්ත වර්ගඵලය', icon: CircleHelp },
-  { id: 'rectangles', label: 'Rectangle area', labelSi: 'සෘජුකෝණාස්ර වර්ගඵලය', icon: RectangleHorizontal },
-  { id: 'triangles', label: 'Triangle area', labelSi: 'ත්රිකෝණ වර්ගඵලය', icon: Triangle },
-  { id: 'squares', label: 'Square area', labelSi: 'චතුරස්ර වර්ගඵලය', icon: Shapes },
-  { id: 'volume', label: 'Volume', labelSi: 'පරිමාව', icon: Shapes },
-  { id: 'percentages', label: 'Percentages', labelSi: 'ප්රතිශත', icon: Percent },
-  { id: 'fractions', label: 'Fractions', labelSi: 'භාග', icon: Divide },
-  { id: 'decimals', label: 'Decimals', labelSi: 'දශම', icon: Hash },
-  { id: 'ratio', label: 'Ratio', labelSi: 'අනුපාත', icon: Divide },
-  { id: 'average', label: 'Average', labelSi: 'සාමාන්යය', icon: Hash },
-  { id: 'word', label: 'Word problems', labelSi: 'වචන ගැටලු', icon: Sparkles },
-  { id: 'differentiation', label: 'Calculus', labelSi: 'කලනය', icon: Sigma },
-  { id: 'arithmetic', label: 'Arithmetic', labelSi: 'ගණිත ක්රියා', icon: Divide },
-]
+const EXAMPLES = {
+  en: [
+    '2x + 5 = 15',
+    'x² - 5x + 6 = 0',
+    'Find the area of a circle with radius 7 cm',
+    'What is 15% of 200?',
+    'Solve the system: 2x + y = 10, x - y = 2',
+    'Differentiate x³ + 4x² - 2x + 1',
+    'Find the volume of a cylinder with radius 5 cm and height 12 cm',
+    'John has 48 chocolates. He shares them equally among 6 friends. How many does each get?',
+    'Find the average of 12, 18, 24, 30, 36',
+    'Simplify: (3x² + 6x) / (x + 2)',
+    'sin(30°) + cos(60°)',
+    'Find the probability of getting heads twice when flipping a coin twice',
+  ],
+  si: [
+    '2x + 5 = 15',
+    'x² - 5x + 6 = 0',
+    'අරය 7 cm වූ වෘත්තයක වර්ගඵලය සොයන්න',
+    '200 න් 15% කීයද?',
+    'ත්රිකෝණයක පාදය 10 cm සහ උස 8 cm නම් වර්ගඵලය සොයන්න',
+    'x³ + 4x² - 2x + 1 අවකලනය කරන්න',
+    '12, 18, 24, 30, 36 හි සාමාන්යය සොයන්න',
+    'ජෝන් සතු ඇපල් 24 ක් ඇත. ඔහු 9 ක් දුන්නේය. ඉතිරිය කීයද?',
+    'LCM of 12 and 18',
+    '1/2 + 3/4 - 1/6',
+  ],
+}
 
-const examples = [
-  { text: '2x + 5 = 15', topic: 'algebra', icon: FunctionSquare, label: 'Linear equation', labelSi: 'සරල සමීකරණය' },
-  { text: 'x^2 - 5x + 6 = 0', topic: 'quadratic', icon: FunctionSquare, label: 'Quadratic equation', labelSi: 'ද්විමූල සමීකරණය' },
-  { text: 'Find the area of a circle with radius 7 cm', topic: 'circles', icon: CircleHelp, label: 'Circle area', labelSi: 'වෘත්ත වර්ගඵලය' },
-  { text: 'What is 15% of 200?', topic: 'percentages', icon: Percent, label: 'Find a percentage', labelSi: 'ප්රතිශතයක් සොයන්න' },
-  { text: 'Increase 500 by 20%', topic: 'percentages', icon: Percent, label: 'Percentage increase', labelSi: 'ප්රතිශත වැඩිවීම' },
-  { text: '1/2 + 1/4', topic: 'fractions', icon: Divide, label: 'Add fractions', labelSi: 'භාග එකතු කරන්න' },
-  { text: 'average of 4, 8, 15, 16, 23', topic: 'average', icon: Hash, label: 'Find the average', labelSi: 'සාමාන්යය සොයන්න' },
-  { text: 'simplify ratio 12:8', topic: 'ratio', icon: Divide, label: 'Simplify ratio', labelSi: 'අනුපාතය සරල කරන්න' },
-  { text: 'John has 24 apples. He gave away 9. How many are left?', topic: 'word', icon: Sparkles, label: 'Word problem', labelSi: 'වචන ගැටලුව' },
-  { text: 'LCM of 12 and 18', topic: 'arithmetic', icon: Hash, label: 'LCM', labelSi: 'සා.ගු.ගු' },
-  { text: 'Find the area of a triangle with base 10 cm and height 6 cm', topic: 'triangles', icon: Triangle, label: 'Triangle area', labelSi: 'ත්රිකෝණ වර්ගඵලය' },
-  { text: 'Differentiate x^2 + 3x + 2', topic: 'differentiation', icon: Sigma, label: 'Differentiate', labelSi: 'අවකලනය' },
-]
+const TOPICS = {
+  en: ['Algebra', 'Geometry', 'Calculus', 'Statistics', 'Trigonometry', 'Fractions', 'Percentages', 'Word Problems', 'Number Theory'],
+  si: ['වීජ ගණිතය', 'ජ්යාමිතිය', 'කලනය', 'සංඛ්යාන', 'ත්රිකෝණමිතිය', 'භාග', 'ප්රතිශත', 'වචන ගැටලු', 'සංඛ්යා න්යාය'],
+}
 
-const copy = {
+const T = {
   en: {
-    eyebrow: 'YOUR MATH STUDY DESK',
-    title: 'Understand the\nway to the answer.',
-    subtitle: 'One clear step at a time. Enter a problem and work through the reasoning, not just the result.',
-    question: 'YOUR QUESTION',
-    placeholder: 'Try "2x + 5 = 15", "average of 4,8,12", or describe a problem…',
-    topic: 'TOPIC',
-    level: 'EXPLANATION',
-    solve: 'Solve this problem',
-    solving: 'Working it out…',
-    steps: 'Solution steps',
-    answer: 'Final answer',
-    verified: 'Answer verified',
-    formula: 'FORMULA',
-    check: 'CHECK YOUR ANSWER',
-    prompt: 'Your worked solution will appear here.',
-    promptSub: 'Try an equation, fraction, percentage, ratio, average, word problem, geometry, or derivative.',
-    simple: 'Simple',
-    standard: 'Standard',
-    detailed: 'Detailed',
-    tryThis: 'Try a question',
-    topics: 'QUICK STARTS',
-    recent: 'RECENT EXAMPLES',
-    error: 'Something needs a second look',
-    calculated: 'Calculated',
-    checkNeeded: 'Check needed',
-    uploadImage: 'Upload screenshot',
-    readingImage: 'Reading image',
-    reviewText: 'Review the extracted text, then solve.',
-    imageTypeError: 'Choose a PNG, JPG, or WebP image under 10 MB.',
-    imageReadError: 'Could not read text from this image. Type the question below instead.',
-    aiChecking: 'Checking AI',
-    aiReady: 'AI tutor ready',
-    aiSetup: 'AI setup needed',
+    brand: 'MathSolve',
+    tagline: 'AI-Powered Mathematics Solver',
+    subtitle: 'Ask any math question — get step-by-step solutions instantly.',
+    placeholder: 'Type any math question… e.g. "Solve x² - 5x + 6 = 0" or "Find the area of a circle with radius 7 cm"',
+    mode: 'Explanation level',
+    simple: 'Simple', standard: 'Standard', detailed: 'Detailed',
+    solve: 'Solve', solving: 'Solving…',
+    upload: 'Upload image',
+    reading: 'Reading…',
+    extracted: 'Text extracted — review and solve.',
+    imgErr: 'Choose a PNG, JPG, or WebP image under 10 MB.',
+    imgReadErr: 'Could not read text from this image.',
+    steps: 'Solution Steps',
+    answer: 'Final Answer',
+    check: 'Verification',
+    formula: 'Formula',
+    newQ: 'New question',
+    examples: 'Try an example',
+    topics: 'Topics',
+    recent: 'Recent',
+    noKey: 'Add your OpenAI API key to the .env file to enable AI solving.',
+    errTitle: 'Could not solve',
+    aiLabel: 'AI',
+    switchLang: 'සිංහල',
   },
   si: {
-    eyebrow: 'ඔබේ ගණිත අධ්යයන මේසය',
-    title: 'පිළිතුරට යන\nමඟ තේරුම් ගන්න.',
-    subtitle: 'පැහැදිලි පියවර එකින් එක. ප්රශ්නය ඇතුළත් කර පිළිතුර පමණක් නොව හේතුවත් ඉගෙන ගන්න.',
-    question: 'ඔබේ ප්රශ්නය',
-    placeholder: '"2x + 5 = 15" හෝ ගණිත ගැටලුවක් ඇතුළත් කරන්න…',
-    topic: 'මාතෘකාව',
-    level: 'පැහැදිලි කිරීම',
-    solve: 'ගැටලුව විසඳන්න',
-    solving: 'විසඳමින්…',
+    brand: 'MathSolve',
+    tagline: 'AI ගණිත විසඳුම් යන්ත්රය',
+    subtitle: 'ඕනෑම ගණිත ප්රශ්නයක් ඇසීමෙන් පියවරෙන් පියවර විසඳුම ලබා ගන්න.',
+    placeholder: 'ඕනෑම ගණිත ප්රශ්නයක් ලියන්න… උදා: "2x + 5 = 15 විසඳන්න" හෝ "අරය 7 cm වූ වෘත්තයක වර්ගඵලය"',
+    mode: 'පැහැදිලි කිරීමේ මට්ටම',
+    simple: 'සරල', standard: 'සාමාන්ය', detailed: 'විස්තරාත්මක',
+    solve: 'විසඳන්න', solving: 'විසඳමින්…',
+    upload: 'රූපයක් එක් කරන්න',
+    reading: 'කියවමින්…',
+    extracted: 'පෙළ හඳුනාගත්තා — පරීක්ෂා කර විසඳන්න.',
+    imgErr: '10 MB ට අඩු PNG, JPG හෝ WebP රූපයක් තෝරන්න.',
+    imgReadErr: 'රූපයෙන් පෙළ කියවිය නොහැකි විය.',
     steps: 'විසඳුමේ පියවර',
     answer: 'අවසාන පිළිතුර',
-    verified: 'පිළිතුර තහවුරුයි',
+    check: 'තහවුරු කිරීම',
     formula: 'සූත්රය',
-    check: 'පිළිතුර පරීක්ෂා කරන්න',
-    prompt: 'ඔබේ පියවරෙන් පියවර විසඳුම මෙහි පෙන්වයි.',
-    promptSub: 'සමීකරණයක්, භාගයක්, ප්රතිශතයක්, අනුපාතයක්, සාමාන්යයක්, වචන ගැටලුවක් හෝ ජ්යාමිතික ගැටලුවක් ඇතුළත් කරන්න.',
-    simple: 'සරල',
-    standard: 'සාමාන්ය',
-    detailed: 'විස්තරාත්මක',
-    tryThis: 'උදාහරණයක් බලන්න',
-    topics: 'ඉක්මන් ආරම්භය',
-    recent: 'මෑත උදාහරණ',
-    error: 'නැවත පරීක්ෂා කළ යුතු දෙයක් ඇත',
-    calculated: 'ගණනය කළා',
-    checkNeeded: 'නැවත පරීක්ෂා කරන්න',
-    uploadImage: 'තිර රුවක් එක් කරන්න',
-    readingImage: 'රූපය කියවමින්',
-    reviewText: 'හඳුනාගත් පෙළ පරීක්ෂා කර විසඳන්න.',
-    imageTypeError: '10 MB ට අඩු PNG, JPG හෝ WebP රූපයක් තෝරන්න.',
-    imageReadError: 'මෙම රූපයෙන් පෙළ කියවිය නොහැක. ප්රශ්නය පහතින් ටයිප් කරන්න.',
-    aiChecking: 'AI තත්ත්වය පරීක්ෂා කරමින්',
-    aiReady: 'AI උපකාරකය සූදානම්',
-    aiSetup: 'AI සකසා නැත',
+    newQ: 'නව ප්රශ්නයක්',
+    examples: 'උදාහරණයක් බලන්න',
+    topics: 'මාතෘකා',
+    recent: 'මෑත',
+    noKey: 'AI සේවාව සක්රිය කිරීමට .env ගොනුවේ OPENAI_API_KEY එකතු කරන්න.',
+    errTitle: 'විසඳිය නොහැකි විය',
+    aiLabel: 'AI',
+    switchLang: 'English',
   },
 }
 
 export default function App() {
   const [question, setQuestion] = useState('')
-  const [topic, setTopic] = useState('auto')
   const [mode, setMode] = useState('standard')
   const [language, setLanguage] = useState('en')
   const [solution, setSolution] = useState(null)
   const [error, setError] = useState('')
+  const [noKey, setNoKey] = useState(false)
   const [loading, setLoading] = useState(false)
   const [recent, setRecent] = useState([])
   const [imagePreview, setImagePreview] = useState('')
   const [ocrStatus, setOcrStatus] = useState('')
-  const [ocrProgress, setOcrProgress] = useState(0)
-  const [aiConfigured, setAiConfigured] = useState(null)
-  const t = copy[language]
+  const textareaRef = useRef(null)
+  const t = T[language]
 
-  function setQuestionText(value) {
-    setQuestion(value)
-    if (/[\u0D80-\u0DFF]/.test(value)) setLanguage('si')
-    else if (/[A-Za-z]/.test(value)) setLanguage('en')
+  function detectLanguage(value) {
+    if (/[\u0D80-\u0DFF]/.test(value)) return 'si'
+    if (/[A-Za-z]/.test(value)) return 'en'
+    return language
   }
 
-  useEffect(() => () => {
-    if (imagePreview) URL.revokeObjectURL(imagePreview)
-  }, [imagePreview])
+  function setQ(value) {
+    setQuestion(value)
+    setLanguage(detectLanguage(value))
+  }
 
-  useEffect(() => {
-    let active = true
-    fetch('/api/health')
-      .then((response) => response.json())
-      .then((data) => { if (active) setAiConfigured(Boolean(data.ai?.configured)) })
-      .catch(() => { if (active) setAiConfigured(false) })
-    return () => { active = false }
-  }, [])
+  useEffect(() => () => { if (imagePreview) URL.revokeObjectURL(imagePreview) }, [imagePreview])
 
-  async function readScreenshot(file) {
+  async function readImage(file) {
     if (!file) return
     if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || file.size > 10 * 1024 * 1024) {
-      setError(t.imageTypeError)
-      return
+      setError(t.imgErr); return
     }
-    setError('')
-    setImagePreview(URL.createObjectURL(file))
-    setOcrStatus('reading')
-    setOcrProgress(0)
+    setError(''); setImagePreview(URL.createObjectURL(file)); setOcrStatus('reading')
     let worker
     try {
       const { createWorker } = await import('tesseract.js')
-      worker = await createWorker('eng', 1, {
-        logger: (message) => {
-          if (message.status === 'recognizing text') setOcrProgress(Math.round(message.progress * 100))
-        },
-      })
+      worker = await createWorker('eng', 1, { logger: () => {} })
       const { data: { text } } = await worker.recognize(file)
       const extracted = text.trim()
-      if (!extracted) throw new Error(t.imageReadError)
-      setQuestionText(question.trim() ? `${question.trim()}\n${extracted}` : extracted)
-      setOcrStatus('ready')
-    } catch {
-      setOcrStatus('failed')
-      setError(t.imageReadError)
-    } finally {
-      await worker?.terminate()
-    }
+      if (!extracted) throw new Error()
+      setQ(question.trim() ? `${question.trim()}\n${extracted}` : extracted)
+      setOcrStatus('done')
+    } catch { setOcrStatus(''); setError(t.imgReadErr) }
+    finally { await worker?.terminate() }
   }
 
-  function clearScreenshot() {
-    setImagePreview('')
-    setOcrStatus('')
-    setOcrProgress(0)
-  }
-
-  async function solve(event) {
-    event?.preventDefault()
+  async function solve(e) {
+    e?.preventDefault()
     if (!question.trim() || loading) return
-    setLoading(true)
-    setError('')
+    setLoading(true); setError(''); setNoKey(false); setSolution(null)
     try {
-      const response = await fetch('/api/solve', {
+      const res = await fetch('/api/solve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, topic, mode, language }),
+        body: JSON.stringify({ question, mode, language }),
       })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || 'Unable to solve this problem.')
+      const data = await res.json()
+      if (!res.ok) {
+        if (data.noKey) { setNoKey(true); return }
+        throw new Error(data.error || 'Unable to solve.')
+      }
       setSolution(data)
-      setRecent((items) => [question, ...items.filter((item) => item !== question)].slice(0, 4))
-    } catch (requestError) {
-      setSolution(null)
-      setError(requestError.message || 'The solver is unavailable. Check that the API is running.')
-    } finally {
-      setLoading(false)
-    }
+      setRecent((prev) => [question, ...prev.filter((q) => q !== question)].slice(0, 6))
+    } catch (err) {
+      setError(err.message || 'The solver is unavailable.')
+    } finally { setLoading(false) }
   }
 
-  function chooseExample(example) {
-    setQuestionText(example.text)
-    setTopic(example.topic)
-    setSolution(null)
-    setError('')
+  function useExample(text) {
+    setQ(text); setSolution(null); setError(''); setNoKey(false)
+    setTimeout(() => textareaRef.current?.focus(), 50)
   }
+
+  function reset() { setSolution(null); setError(''); setNoKey(false); setQuestion(''); setImagePreview(''); setOcrStatus('') }
 
   return (
-    <div className="app-shell">
-      <header className="topbar">
-        <a className="brand" href="#home" aria-label="MathSolve home">
-          <span className="brand-mark"><Sigma size={20} strokeWidth={2.4} /></span>
-          <span>math<span className="brand-accent">solve</span></span>
-        </a>
-        <div className="topbar-right">
-          <span className="edition-label">A BETTER WAY TO LEARN MATH</span>
-          <span className={`ai-status ${aiConfigured ? 'ready' : ''}`} title={aiConfigured ? 'OpenAI Responses API is configured on the server.' : 'Add OPENAI_API_KEY to .env to enable OpenAI.'}>
-            <Sparkles size={13} />{aiConfigured === null ? t.aiChecking : aiConfigured ? t.aiReady : t.aiSetup}
-          </span>
-          <button className="language-toggle" type="button" onClick={() => setLanguage(language === 'en' ? 'si' : 'en')} aria-label="Switch language">
-            <Languages size={16} /><span>{language === 'en' ? 'සිංහල' : 'English'}</span><ChevronDown size={14} />
-          </button>
+    <div className="ms-shell">
+      {/* Header */}
+      <header className="ms-header">
+        <div className="ms-brand">
+          <span className="ms-brand-icon"><Sigma size={18} strokeWidth={2.5} /></span>
+          <span className="ms-brand-name">{t.brand}</span>
+          <span className="ms-brand-tag">{t.tagline}</span>
         </div>
+        <button className="ms-lang-btn" onClick={() => setLanguage(language === 'en' ? 'si' : 'en')}>
+          <Languages size={14} />{t.switchLang}
+        </button>
       </header>
 
-      <main id="home">
-        <section className="intro-row">
-          <div className="intro-copy">
-            <p className="eyebrow"><span className="eyebrow-line" />{t.eyebrow}</p>
-            <h1>{t.title.split('\n').map((line, index) => <span key={line}>{index === 1 ? <><i>{line.split(' ').slice(0, -1).join(' ')} </i>{line.split(' ').at(-1)}</> : line}<br /></span>)}</h1>
-            <p className="intro-subtitle">{t.subtitle}</p>
-          </div>
-          <div className="math-stamp" aria-hidden="true">
-            <span className="stamp-ring" />
-            <span className="stamp-top">LEARN IT</span>
-            <span className="stamp-symbol">x + y</span>
-            <span className="stamp-bottom">STEP BY STEP · 01</span>
-          </div>
+      <main className="ms-main">
+        {/* Hero */}
+        <section className="ms-hero">
+          <h1>{t.subtitle}</h1>
         </section>
 
-        <section className="workspace" aria-label="Math solver">
-          <form className="question-panel" onSubmit={solve}>
-            <div className="panel-heading">
-              <div><span className="section-number">01</span><h2>{t.question}</h2></div>
-              <span className="input-hint">↵ Enter to solve</span>
-            </div>
-            <label className="sr-only" htmlFor="question-input">{t.question}</label>
-            <textarea id="question-input" value={question} onChange={(event) => setQuestionText(event.target.value)} placeholder={t.placeholder} rows={5} maxLength={1000} />
-            <div className="attachment-row">
-              <label className="upload-button">
-                <ImagePlus size={15} /><span>{t.uploadImage}</span>
-                <input type="file" accept="image/png,image/jpeg,image/webp" capture="environment" onChange={(event) => readScreenshot(event.target.files?.[0])} />
-              </label>
-              {ocrStatus === 'reading' && <span className="ocr-status"><LoaderCircle size={13} className="spin" />{t.readingImage} {ocrProgress}%</span>}
-              {ocrStatus === 'ready' && <span className="ocr-status"><Check size={13} />{t.reviewText}</span>}
-              {imagePreview && <div className="image-preview"><img src={imagePreview} alt="Uploaded question screenshot" /><button type="button" className="remove-image" onClick={clearScreenshot} aria-label="Remove screenshot"><X size={13} /></button></div>}
-            </div>
-            <div className="input-footer">
-              <span><span className="status-dot" />TEXT INPUT</span>
-              <span>{question.length}/1000</span>
-            </div>
-            <div className="control-row">
-              <div className="select-control">
-                <label htmlFor="topic-select">{t.topic}</label>
-                <select id="topic-select" value={topic} onChange={(event) => setTopic(event.target.value)}>
-                  {topics.map((item) => <option key={item.id} value={item.id}>{language === 'si' ? item.labelSi : item.label}</option>)}
-                </select>
-                <ChevronDown size={15} aria-hidden="true" />
+        {/* Input area */}
+        <section className="ms-input-section">
+          <form onSubmit={solve} className="ms-form">
+            <div className="ms-textarea-wrap">
+              <textarea
+                ref={textareaRef}
+                className="ms-textarea"
+                value={question}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder={t.placeholder}
+                rows={4}
+                maxLength={2000}
+              />
+              <div className="ms-textarea-footer">
+                <label className="ms-img-btn">
+                  <ImagePlus size={14} />
+                  <span>{t.upload}</span>
+                  <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => readImage(e.target.files?.[0])} />
+                </label>
+                {ocrStatus === 'reading' && <span className="ms-ocr-msg"><LoaderCircle size={12} className="spin" />{t.reading}</span>}
+                {ocrStatus === 'done' && <span className="ms-ocr-msg ok"><Check size={12} />{t.extracted}</span>}
+                {imagePreview && (
+                  <div className="ms-img-preview">
+                    <img src={imagePreview} alt="uploaded" />
+                    <button type="button" onClick={() => { setImagePreview(''); setOcrStatus('') }}><X size={11} /></button>
+                  </div>
+                )}
+                <span className="ms-char-count">{question.length}/2000</span>
               </div>
-              <div className="mode-control">
-                <span>{t.level}</span>
-                <div className="mode-switch" role="group" aria-label={t.level}>
-                  {['simple', 'standard', 'detailed'].map((item) => <button type="button" key={item} className={mode === item ? 'selected' : ''} onClick={() => setMode(item)}>{t[item]}</button>)}
+            </div>
+
+            <div className="ms-controls">
+              <div className="ms-mode-group">
+                <span className="ms-mode-label">{t.mode}</span>
+                <div className="ms-mode-btns">
+                  {['simple', 'standard', 'detailed'].map((m) => (
+                    <button key={m} type="button" className={`ms-mode-btn ${mode === m ? 'active' : ''}`} onClick={() => setMode(m)}>
+                      {t[m]}
+                    </button>
+                  ))}
                 </div>
               </div>
-            </div>
-            <button className="solve-button" type="submit" disabled={!question.trim() || loading}>
-              {loading ? <LoaderCircle size={18} className="spin" /> : <Sparkles size={17} />}
-              <span>{loading ? t.solving : t.solve}</span><ArrowRight size={18} className="solve-arrow" />
-            </button>
-            <div className="examples-block">
-              <p className="micro-label">{t.tryThis}</p>
-              <div className="example-list">
-                {examples.map((example) => {
-                  const Icon = example.icon
-                  return <button type="button" key={example.text} className="example-button" onClick={() => chooseExample(example)}><Icon size={15} /><span>{language === 'si' ? example.labelSi : example.label}</span><ArrowDown size={13} /></button>
-                })}
-              </div>
+              <button className="ms-solve-btn" type="submit" disabled={!question.trim() || loading}>
+                {loading ? <LoaderCircle size={17} className="spin" /> : <Sparkles size={17} />}
+                <span>{loading ? t.solving : t.solve}</span>
+                {!loading && <ArrowRight size={16} />}
+              </button>
             </div>
           </form>
+        </section>
 
-          <section className={`solution-panel ${solution ? 'has-solution' : ''}`} aria-live="polite">
-            {solution ? <>
-              <div className="solution-head">
-                <div><p className="micro-label">{t.steps}</p><h2>{solution.topic}{solution.solvedByAI && <span className="ai-badge">AI</span>}</h2></div>
-                <button className="icon-button" type="button" title="Start a new solution" aria-label="Start a new solution" onClick={() => { setSolution(null); setError('') }}><RotateCcw size={17} /></button>
+        {/* No key warning */}
+        {noKey && (
+          <div className="ms-nokey">
+            <AlertCircle size={18} />
+            <div>
+              <strong>{language === 'si' ? 'API Key නොමැත' : 'API Key Required'}</strong>
+              <p>{t.noKey}</p>
+              <code>OPENAI_API_KEY=sk-...</code>
+            </div>
+          </div>
+        )}
+
+        {/* Error */}
+        {error && !noKey && (
+          <div className="ms-error">
+            <AlertCircle size={16} />
+            <div><strong>{t.errTitle}</strong><p>{error}</p></div>
+          </div>
+        )}
+
+        {/* Solution */}
+        {solution && (
+          <section className="ms-solution">
+            <div className="ms-sol-header">
+              <div className="ms-sol-meta">
+                <span className="ms-sol-topic">{solution.topic}</span>
+                {solution.solvedByAI && <span className="ms-ai-badge"><Sparkles size={10} />{t.aiLabel}</span>}
               </div>
-              <div className="solved-question"><span>Q</span><p>{solution.question}</p></div>
-              {solution.steps.map((step, index) => <article className="step-row" key={`${step.title}-${index}`}>
-                <div className="step-marker">{String(index + 1).padStart(2, '0')}</div>
-                <div className="step-content"><h3>{step.title}</h3><p>{step.explanation}</p><div className="math-line">{step.math}</div></div>
-              </article>)}
-              <div className="answer-block">
-                <div className="answer-title"><span>{t.answer}</span><span className={`verified-badge ${solution.verified ? '' : 'needs-check'}`}><Check size={13} />{solution.verificationLabel || (solution.verified ? t.verified : t.checkNeeded)}</span></div>
-                <p className="answer-value">{solution.answer}</p>
+              <button className="ms-reset-btn" onClick={reset}><RotateCcw size={15} />{t.newQ}</button>
+            </div>
+
+            <div className="ms-sol-question">
+              <span className="ms-q-label">Q</span>
+              <p>{solution.question}</p>
+            </div>
+
+            {solution.formula && (
+              <div className="ms-formula-bar">
+                <span className="ms-formula-label">{t.formula}</span>
+                <code>{solution.formula}</code>
               </div>
-              <div className="verification-block">
-                <div className="verification-title"><Check size={15} /><span>{t.check}</span></div>
+            )}
+
+            <div className="ms-steps-label">{t.steps}</div>
+            <div className="ms-steps">
+              {solution.steps.map((step, i) => (
+                <div className="ms-step" key={i}>
+                  <div className="ms-step-num">{String(i + 1).padStart(2, '0')}</div>
+                  <div className="ms-step-body">
+                    <h3>{step.title}</h3>
+                    {step.explanation && <p>{step.explanation}</p>}
+                    {step.math && <div className="ms-math">{step.math}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="ms-answer-block">
+              <div className="ms-answer-label">{t.answer}</div>
+              <div className="ms-answer-value">{solution.answer}</div>
+              <div className={`ms-verified ${solution.verified ? 'ok' : 'warn'}`}>
+                <Check size={13} />
+                <span>{solution.verificationLabel}</span>
+              </div>
+            </div>
+
+            {solution.verification && (
+              <div className="ms-verification">
+                <div className="ms-ver-label"><Check size={13} />{t.check}</div>
                 <p>{solution.verification}</p>
               </div>
-              <div className="formula-footer"><span className="micro-label">{t.formula}</span><code>{solution.formula}</code></div>
-            </> : <div className="empty-solution">
-              <div className="empty-graphic"><span className="graphic-line graphic-line-one" /><span className="graphic-line graphic-line-two" /><span className="graphic-center"><Equal size={23} /></span><span className="graphic-dot graphic-dot-one" /><span className="graphic-dot graphic-dot-two" /></div>
-              {error ? <><p className="empty-title error-title">{t.error}</p><p className="empty-subtitle">{error}</p></> : <><p className="empty-title">{t.prompt}</p><p className="empty-subtitle">{t.promptSub}</p></>}
-              <div className="formula-note"><span>π</span><span>x²</span><span>∑</span><span>√</span><span>÷</span></div>
-            </div>}
+            )}
           </section>
-        </section>
+        )}
 
-        <section className="below-workspace">
-          <div className="quick-starts">
-            <p className="micro-label">{t.topics}</p>
-            <div className="topic-list">{topics.slice(1).map((item) => {
-              const Icon = item.icon
-              return <button type="button" className={`topic-chip ${topic === item.id ? 'active' : ''}`} key={item.id} onClick={() => setTopic(item.id)}><Icon size={15} /><span>{language === 'si' ? item.labelSi : item.label}</span><Plus size={13} className="chip-plus" /></button>
-            })}</div>
+        {/* Examples + Recent */}
+        {!solution && !loading && (
+          <div className="ms-bottom-grid">
+            <div className="ms-examples-panel">
+              <div className="ms-panel-title"><BookOpen size={13} />{t.examples}</div>
+              <div className="ms-example-list">
+                {EXAMPLES[language].map((ex) => (
+                  <button key={ex} className="ms-example-btn" onClick={() => useExample(ex)}>
+                    {ex}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="ms-side-panel">
+              <div className="ms-topics-panel">
+                <div className="ms-panel-title">{t.topics}</div>
+                <div className="ms-topic-list">
+                  {TOPICS[language].map((tp) => (
+                    <button key={tp} className="ms-topic-chip" onClick={() => useExample(tp + ': ')}>{tp}</button>
+                  ))}
+                </div>
+              </div>
+
+              {recent.length > 0 && (
+                <div className="ms-recent-panel">
+                  <div className="ms-panel-title">{t.recent}</div>
+                  {recent.map((q) => (
+                    <button key={q} className="ms-recent-btn" onClick={() => useExample(q)}>
+                      <span>{q}</span><ArrowRight size={12} />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="recent-questions">
-            <p className="micro-label"><Clock3 size={13} />{t.recent}</p>
-            {recent.length ? <div className="recent-list">{recent.map((item) => <button type="button" key={item} onClick={() => { setQuestionText(item); setSolution(null) }}>{item}<ArrowRight size={14} /></button>)}</div> : <p className="recent-empty">Your solved examples will be kept here during this session.</p>}
-          </div>
-        </section>
+        )}
       </main>
-      <footer className="page-footer"><span>MathSolve <span className="footer-dot">·</span> Learn by solving</span><span>BUILT FOR CURIOUS MINDS</span></footer>
+
+      <footer className="ms-footer">
+        <span>MathSolve · AI-Powered · {language === 'si' ? 'ඕනෑම ගණිත ප්රශ්නයක් විසඳන්න' : 'Solve any math problem'}</span>
+      </footer>
     </div>
   )
 }
