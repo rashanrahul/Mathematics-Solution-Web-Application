@@ -146,15 +146,19 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question, mode, language }),
       })
-      const data = await res.json()
+      const data = await res.json().catch(() => ({ error: `Server error ${res.status}` }))
       if (!res.ok) {
         if (data.noKey) { setNoKey(true); return }
-        throw new Error(data.error || 'Unable to solve.')
+        throw new Error(data.error || `Error ${res.status}: Unable to solve.`)
       }
       setSolution(data)
       setRecent((prev) => [question, ...prev.filter((q) => q !== question)].slice(0, 6))
     } catch (err) {
-      setError(err.message || 'The solver is unavailable.')
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        setError(language === 'si' ? 'සම්බන්ධතා දෝෂයකි. Internet connection check කරන්න.' : 'Network error. Check your internet connection.')
+      } else {
+        setError(err.message || 'The solver is unavailable.')
+      }
     } finally { setLoading(false) }
   }
 
