@@ -1,0 +1,610 @@
+ඔව්. ඔයාට develop කරන්න පුළුවන් **“Math Problem Solver & Learning Website”** එකක් ලෙස requirement එක හදමු. මෙහි ප්‍රධාන අරමුණ වන්නේ student කෙනෙක් ගණිත ප්‍රශ්නයක් ඇතුළත් කළාම **final answer එක විතරක් නොව, step-by-step පැහැදිලි solution එකක්** ලබා දීමයි.
+
+# 📐 Mathematics Solution Web Application – Requirements
+
+## 1. Project Name
+
+**MathSolve – Smart Mathematics Problem Solver**
+
+### Main Objective
+
+ගණිත ප්‍රශ්න සඳහා නිවැරදි පිළිතුරක් සමඟ **පියවරෙන් පියවර solution එක, භාවිතා කළ formula එක සහ සරල explanation එක** ලබා දෙන web application එකක් නිර්මාණය කිරීම.
+
+---
+
+## 2. Target Users
+
+* 👨‍🎓 School Students
+* 👩‍🎓 University Students
+* 👨‍🏫 Teachers
+* 📚 Mathematics learners
+
+---
+
+# 3. Main Features
+
+### 3.1 Math Problem Input
+
+Userට ප්‍රශ්නය ඇතුළත් කිරීමට ක්‍රම කිහිපයක් තිබිය යුතුයි.
+
+**Input methods:**
+
+* ⌨️ Type the question
+* 📷 Upload/Take a photo of a question
+* 🧮 Mathematical equation editor
+* 🎤 Voice input — optional
+
+**Examples:**
+
+```text
+2x + 5 = 15
+```
+
+```text
+Find the area of a circle with radius 7cm
+```
+
+```text
+Differentiate x² + 3x + 2
+```
+
+---
+
+# 4. Subject / Topic Selection
+
+Userට Mathematics topic එක select කරන්න පුළුවන්.
+
+### Basic Mathematics
+
+* Addition
+* Subtraction
+* Multiplication
+* Division
+* Fractions
+* Percentages
+* Ratios
+* Averages
+
+### Algebra
+
+* Linear Equations
+* Quadratic Equations
+* Simultaneous Equations
+* Factorization
+* Algebraic Expressions
+* Inequalities
+
+### Geometry
+
+* Area
+* Perimeter
+* Volume
+* Angles
+* Triangles
+* Circles
+* Coordinate Geometry
+
+### Trigonometry
+
+* Sin
+* Cos
+* Tan
+* Trigonometric identities
+* Trigonometric equations
+
+### Calculus
+
+* Limits
+* Differentiation
+* Integration
+
+### Statistics
+
+* Mean
+* Median
+* Mode
+* Probability
+* Standard Deviation
+
+---
+
+# 5. Step-by-Step Solution
+
+මේක website එකේ **ප්‍රධාන feature එක**.
+
+උදාහරණයක්:
+
+**Question:**
+
+```text
+2x + 5 = 15
+```
+
+**Solution:**
+
+### Step 1
+
+Subtract 5 from both sides.
+
+```text
+2x + 5 - 5 = 15 - 5
+```
+
+### Step 2
+
+```text
+2x = 10
+```
+
+### Step 3
+
+Divide both sides by 2.
+
+```text
+x = 10 / 2
+```
+
+### Final Answer
+
+```text
+x = 5
+```
+
+ඒ වගේ **studentට තේරෙන විදිහට** solution එක explain කරන්න ඕන.
+
+---
+
+# 6. Explanation Mode
+
+Userට solution level එක select කරන්න දෙන්න.
+
+### 🟢 Simple
+
+Beginner/student friendly explanation.
+
+### 🔵 Standard
+
+Normal mathematical explanation.
+
+### 🟣 Detailed
+
+Formula + reasoning + complete derivation.
+
+උදාහරණයක්:
+
+> **Why do we subtract 5?**
+> We subtract 5 to remove the constant term from the left side and isolate `2x`.
+
+මේ feature එක learning purpose එකට වැදගත්.
+
+---
+
+# 7. Formula Display
+
+Solution එකේදී භාවිතා කරන formula එක පෙන්වන්න.
+
+උදාහරණයක්:
+
+**Circle Area**
+
+```text
+A = πr²
+```
+
+Given:
+
+```text
+r = 7
+```
+
+Therefore:
+
+```text
+A = π × 7²
+A = 49π
+A ≈ 153.94 cm²
+```
+
+---
+
+# 8. Answer Verification
+
+System එක solution එක calculate කරලා **answer එක verify** කරන්න ඕන.
+
+Example:
+
+```text
+x = 5
+```
+
+Verification:
+
+```text
+2(5) + 5 = 15
+10 + 5 = 15
+15 = 15 ✓
+```
+
+Userට:
+
+> ✅ Answer Verified
+
+වගේ message එකක් පෙන්වන්න.
+
+---
+
+# 9. Graph / Visual Solution
+
+Relevant mathematical problems සඳහා graphs/diagrams generate කරන්න.
+
+උදාහරණ:
+
+* Linear equations → 📈 Graph
+* Quadratic equations → Parabola
+* Geometry → Diagram
+* Trigonometry → Triangle diagram
+* Statistics → Charts
+
+මෙය website එකේ learning experience එක වැඩි කරනවා.
+
+---
+
+# 10. Practice Questions
+
+Solution එක බලලා ඉවර වුණාම:
+
+**“Try a Similar Question”**
+
+button එකක් තියෙන්න ඕන.
+
+Example:
+
+```text
+2x + 5 = 15
+```
+
+solve කළාට පස්සේ:
+
+```text
+Try:
+3x + 7 = 22
+```
+
+Studentට තමන්ම answer කරන්න පුළුවන්.
+
+---
+
+# 11. Quiz System
+
+Topic එකක් select කරලා quiz එකක් කරන්න පුළුවන්.
+
+Example:
+
+**Algebra Quiz**
+
+```text
+Question 1/10
+
+Solve:
+3x + 6 = 18
+
+A. 2
+B. 4
+C. 6
+D. 8
+```
+
+අවසානයේ:
+
+```text
+Score: 8/10
+Percentage: 80%
+```
+
+---
+
+# 12. User Dashboard
+
+Login කරන users සඳහා dashboard එකක්.
+
+```text
+Dashboard
+
+👤 Student Name
+
+Questions Solved       125
+Correct Answers         108
+Practice Questions       42
+Quiz Score               86%
+
+Recent Questions
+--------------------------
+Quadratic Equation
+Circle Area
+Probability
+Linear Equation
+```
+
+---
+
+# 13. History
+
+User solve කළ problems save කරන්න.
+
+```text
+My History
+
+Question                Date        Result
+------------------------------------------------
+2x + 5 = 15             29/09/26    ✓
+x² + 5x + 6             28/09/26    ✓
+Area of Circle          27/09/26    ✓
+```
+
+Userට නැවත solution එක බලන්න පුළුවන්.
+
+---
+
+# 14. Search
+
+Math topics සහ previous questions search කරන්න.
+
+```text
+🔍 Search mathematics topics...
+
+Search:
+"quadratic equations"
+```
+
+Results:
+
+```text
+Quadratic Equations
+→ Introduction
+→ Formula
+→ Examples
+→ Practice
+```
+
+---
+
+# 15. Sinhala + English Support
+
+Sri Lankan students target කරනවා නම් මේක **ගොඩක් වැදගත් feature එකක්**.
+
+Language:
+
+```text
+🇬🇧 English
+🇱🇰 සිංහල
+```
+
+උදාහරණ:
+
+**English**
+
+> Subtract 5 from both sides.
+
+**සිංහල**
+
+> දෙපසින්ම 5 අඩු කරන්න.
+
+---
+
+# 16. Admin Panel
+
+Adminට website content manage කරන්න පුළුවන්.
+
+### Admin Functions
+
+* Add mathematics topics
+* Add formulas
+* Add questions
+* Add answers
+* Add quizzes
+* Edit/delete questions
+* View users
+* View quiz results
+* View popular topics
+
+---
+
+# 17. Recommended UI Structure
+
+### Home Page
+
+```text
+------------------------------------------------
+              🧮 MathSolve
+------------------------------------------------
+
+        Solve Mathematics Problems
+        Step-by-Step & Easy to Understand
+
+ ┌───────────────────────────────────────────┐
+ │ Enter your mathematics problem...         │
+ │                                           │
+ │ 2x + 5 = 15                               │
+ └───────────────────────────────────────────┘
+
+ [ 📷 Upload ] [ 🧮 Equation ] [ Solve ]
+
+------------------------------------------------
+
+Popular Topics
+
+[ Algebra ] [ Geometry ] [ Trigonometry ]
+
+[ Calculus ] [ Statistics ] [ Probability ]
+
+------------------------------------------------
+
+        Learn Mathematics Easily
+        Practice • Understand • Improve
+------------------------------------------------
+```
+
+---
+
+# 18. Solution Page
+
+```text
+Question
+────────────────────────
+
+2x + 5 = 15
+
+
+Step 1
+Subtract 5 from both sides.
+
+2x = 10
+
+
+Step 2
+Divide both sides by 2.
+
+x = 5
+
+
+✅ Final Answer
+
+x = 5
+
+
+🔍 Verify Answer
+
+2(5) + 5 = 15
+15 = 15 ✓
+
+
+[ Try Similar Question ]
+[ Save Solution ]
+[ Explain More ]
+```
+
+---
+
+# 19. Technology Stack
+
+ඔයාගේ project එක **modern web application** එකක් විදිහට හදන්න නම්:
+
+### Frontend
+
+* HTML5
+* CSS3
+* JavaScript
+* React.js — recommended
+* MathJax / KaTeX — mathematical formulas
+* Chart.js — graphs/charts
+
+### Backend
+
+* Node.js
+* Express.js
+* REST API
+
+
+
+### AI / Mathematics Engine
+
+AI explanation සඳහා:
+
+* LLM API
+
+Mathematical calculations සඳහා:
+
+* Math.js
+* SymPy backend/service
+
+**වැදගත්:** AI එකෙන් answer එක විතරක් generate කරනවාට වඩා, mathematical calculation එක වෙනම verification engine එකකින් verify කරන architecture එකක් හොඳයි.
+
+---
+
+# 20. Basic System Architecture
+
+```text
+             USER
+               │
+               ▼
+        ┌───────────────┐
+        │   Frontend    │
+        │ React / HTML  │
+        └───────┬───────┘
+                │
+                ▼
+        ┌───────────────┐
+        │   Backend     │
+        │ Node + API    │
+        └───────┬───────┘
+                │
+       ┌────────┴─────────┐
+       ▼                  ▼
+┌─────────────┐    ┌──────────────┐
+│ Mathematics │    │ AI Explain   │
+│ Engine      │    │ Engine       │
+└─────────────┘    └──────────────┘
+       │                  │
+       └────────┬─────────┘
+                ▼
+        ┌───────────────┐
+        │   Database    │
+        └───────────────┘
+```
+
+---
+
+# 21. Non-Functional Requirements
+
+Website එක:
+
+* ⚡ Fast loading විය යුතුයි
+* 📱 Mobile responsive විය යුතුයි
+* 💻 Desktop compatible විය යුතුයි
+* 🔒 User data secure විය යුතුයි
+* ♿ Easy to use විය යුතුයි
+* 🌐 Sinhala/English support තිබිය යුතුයි
+* 📊 Large number of users handle කළ හැකි විය යුතුයි
+* 🧮 Calculations accurate විය යුතුයි
+
+---
+
+# 22. MVP Version එකට මුලින් හදන්න ඕන Features
+
+Project එක ලොකු නිසා **මුලින්ම මේ 7 features** හදන්න:
+
+1. ✅ Math Question Input
+2. ✅ Topic Detection/Selection
+3. ✅ Step-by-Step Solution
+4. ✅ Formula Display
+5. ✅ Answer Verification
+6. ✅ Sinhala + English
+7. ✅ Mobile Responsive UI
+
+ඊට පස්සේ:
+
+**Phase 2**
+
+* 📷 Image question solving
+* 📈 Graphs
+* 📝 Practice questions
+* 🎯 Quiz
+* 👤 Login
+* 📚 History
+
+**Phase 3**
+
+* 🤖 AI tutor
+* 🎤 Voice input
+* 📊 Student progress analytics
+* 👨‍🏫 Teacher dashboard
+* 🏆 Gamification
+
+### ⭐ Project එකේ main concept එක
+
+> **“Don't just give the answer — teach the student how to solve the problem.”**
+
+මේ concept එක අනුව හදනවා නම්, මේක සාමාන්‍ය calculator එකකට වඩා **Math Learning + AI Solution platform** එකක් බවට පත් කරන්න පුළුවන්.
+
+
+
