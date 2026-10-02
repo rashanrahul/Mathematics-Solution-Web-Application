@@ -1,0 +1,14 @@
+{
+  "name": "Rahul Mathematics Solution",
+  "short_name": "Math Solution",
+  "description": "Get clear step-by-step mathematics solutions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icons/image 1.jpg", "sizes": "192x192", "type": "image/jpeg" },
+    { "src": "/icons/image 2.jpg", "sizes": "512x512", "type": "image/jpeg" }
+  ]
+}

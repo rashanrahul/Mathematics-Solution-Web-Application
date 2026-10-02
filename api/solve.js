@@ -158,7 +158,9 @@ export default async function handler(req, res) {
     try { body = JSON.parse(body || '{}') } catch { body = {} }
   }
 
-  const { question = '', language = 'en', mode = 'standard' } = body
+  const question = typeof body.question === 'string' ? body.question : ''
+  const language = typeof body.language === 'string' ? body.language : 'en'
+  const mode = typeof body.mode === 'string' ? body.mode : 'standard'
   const normalized = String(question).trim()
   const si = language === 'si'
 
