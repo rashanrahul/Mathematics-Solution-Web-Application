@@ -3,23 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Learn mathematics with verified, step-by-step solutions." />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="description" content="AI-powered step-by-step mathematics solver in English and Sinhala." />
+    <meta name="theme-color" content="#2d5a3d" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MathSolve" />
     <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/image 1.jpg" />
     <title>Rahul MathSolve — Learn by solving</title>
   </head>
   <body>
     <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js")
-      .then(() => console.log("Service Worker registered"))
-      .catch(err => console.error("SW error:", err));
-  });
-}
-</script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

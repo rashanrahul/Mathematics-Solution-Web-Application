@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, Check, ChevronDown, ImagePlus, Languages, LoaderCircle, RotateCcw, Sparkles, X, AlertCircle, BookOpen, Sigma } from 'lucide-react'
+import { ArrowRight, Check, ChevronDown, ImagePlus, Languages, LoaderCircle, RotateCcw, Sparkles, X, AlertCircle, BookOpen, Sigma, Download } from 'lucide-react'
 
 const EXAMPLES = {
   en: [
@@ -101,8 +101,25 @@ export default function App() {
   const [recent, setRecent] = useState([])
   const [imagePreview, setImagePreview] = useState('')
   const [ocrStatus, setOcrStatus] = useState('')
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [installed, setInstalled] = useState(false)
   const textareaRef = useRef(null)
   const t = T[language]
+
+  useEffect(() => {
+    const handler = (e) => { e.preventDefault(); setInstallPrompt(e) }
+    window.addEventListener('beforeinstallprompt', handler)
+    window.addEventListener('appinstalled', () => { setInstalled(true); setInstallPrompt(null) })
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
+
+  async function installApp() {
+    if (!installPrompt) return
+    installPrompt.prompt()
+    const { outcome } = await installPrompt.userChoice
+    if (outcome === 'accepted') setInstalled(true)
+    setInstallPrompt(null)
+  }
 
   function detectLanguage(value) {
     if (/[\u0D80-\u0DFF]/.test(value)) return 'si'
@@ -198,9 +215,17 @@ export default function App() {
           <span className="ms-brand-name">{t.brand}</span>
           <span className="ms-brand-tag">{t.tagline}</span>
         </div>
-        <button className="ms-lang-btn" onClick={() => setLanguage(language === 'en' ? 'si' : 'en')}>
-          <Languages size={14} />{t.switchLang}
-        </button>
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          {installPrompt && !installed && (
+            <button className="ms-install-btn" onClick={installApp}>
+              <Download size={13} />
+              {language === 'si' ? 'Install' : 'Install App'}
+            </button>
+          )}
+          <button className="ms-lang-btn" onClick={() => setLanguage(language === 'en' ? 'si' : 'en')}>
+            <Languages size={14} />{t.switchLang}
+          </button>
+        </div>
       </header>
 
       <main className="ms-main">
