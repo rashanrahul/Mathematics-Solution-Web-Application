@@ -57,7 +57,7 @@ const T = {
     examples: 'Try an example',
     topics: 'Topics',
     recent: 'Recent',
-    noKey: 'Add your OpenAI API key to the .env file to enable AI solving.',
+    noKey: 'Add your Gemini API key to the .env file to enable AI solving.',
     errTitle: 'Could not solve',
     aiLabel: 'AI',
     switchLang: 'සිංහල',
@@ -83,7 +83,7 @@ const T = {
     examples: 'උදාහරණයක් බලන්න',
     topics: 'මාතෘකා',
     recent: 'මෑත',
-    noKey: 'AI සේවාව සක්රිය කිරීමට .env ගොනුවේ OPENAI_API_KEY එකතු කරන්න.',
+    noKey: 'AI සේවාව සක්රිය කිරීමට .env ගොනුවේ GEMINI_API_KEY එකතු කරන්න.',
     errTitle: 'විසඳිය නොහැකි විය',
     aiLabel: 'AI',
     switchLang: 'English',
@@ -255,7 +255,7 @@ export default function App() {
             <div>
               <strong>{language === 'si' ? 'API Key නොමැත' : 'API Key Required'}</strong>
               <p>{t.noKey}</p>
-              <code>OPENAI_API_KEY=sk-...</code>
+              <code>GEMINI_API_KEY=your-gemini-key</code>
             </div>
           </div>
         )}
