@@ -34,6 +34,7 @@ function displayNumber(value) {
 function tryVerify(question, answer, language) {
   const si = language === 'si'
   try {
+    if (typeof answer !== 'string' || typeof question !== 'string') throw new Error('invalid types')
     // Linear equation: extract x = number and verify
     const xMatch = answer.match(/x\s*=\s*(-?\d+(?:\.\d+)?)/)
     if (xMatch && question.includes('=')) {
