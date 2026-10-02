@@ -37,7 +37,7 @@ const TOPICS = {
 
 const T = {
   en: {
-    brand: 'MathSolve',
+    brand: 'Rahul MathSolve',
     tagline: 'AI-Powered Mathematics Solver',
     subtitle: 'Ask any math question — get step-by-step solutions instantly.',
     placeholder: 'Type any math question… e.g. "Solve x² - 5x + 6 = 0" or "Find the area of a circle with radius 7 cm"',
@@ -63,7 +63,7 @@ const T = {
     switchLang: 'සිංහල',
   },
   si: {
-    brand: 'MathSolve',
+    brand: 'Rahul MathSolve',
     tagline: 'AI ගණිත විසඳුම් යන්ත්රය',
     subtitle: 'ඕනෑම ගණිත ප්රශ්නයක් ඇසීමෙන් පියවරෙන් පියවර විසඳුම ලබා ගන්න.',
     placeholder: 'ඕනෑම ගණිත ප්රශ්නයක් ලියන්න… උදා: "2x + 5 = 15 විසඳන්න" හෝ "අරය 7 cm වූ වෘත්තයක වර්ගඵලය"',
@@ -363,7 +363,7 @@ export default function App() {
       </main>
 
       <footer className="ms-footer">
-        <span>MathSolve · AI-Powered · {language === 'si' ? 'ඕනෑම ගණිත ප්රශ්නයක් විසඳන්න' : 'Solve any math problem'}</span>
+        <span>Rahul MathSolve · AI-Powered · {language === 'si' ? 'ඕනෑම ගණිත ප්රශ්නයක් විසඳන්න' : 'Solve any math problem'}</span>
       </footer>
     </div>
   )
