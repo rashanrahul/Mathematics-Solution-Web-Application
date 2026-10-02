@@ -136,19 +136,31 @@ export default function App() {
     finally { await worker?.terminate() }
   }
 
+  async function callApi() {
+    const res = await fetch('/api/solve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, mode, language }),
+    })
+    const data = await res.json().catch(() => ({ error: `Server error ${res.status}` }))
+    return { res, data }
+  }
+
   async function solve(e) {
     e?.preventDefault()
     if (!question.trim() || loading) return
     setLoading(true); setError(''); setNoKey(false); setSolution(null)
     try {
-      const res = await fetch('/api/solve', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question, mode, language }),
-      })
-      const data = await res.json().catch(() => ({ error: `Server error ${res.status}` }))
+      let { res, data } = await callApi()
+
+      // Retry once after 3 s on temporary AI failures (502 / aiUnavailable)
+      if (data.aiUnavailable || res.status === 502) {
+        await new Promise((r) => setTimeout(r, 3000))
+        ;({ res, data } = await callApi())
+      }
+
       if (data.aiUnavailable) {
-        setError(data.error || (language === 'si' ? 'AI සේවාව දැනට ලබාගත නොහැක.' : 'AI solving is currently unavailable.'))
+        setError(data.error || (language === 'si' ? 'AI සේවාව දැනට ලබාගත නොහැක.' : 'AI is experiencing high demand. Please try again in a moment.'))
         return
       }
       if (!res.ok) {
