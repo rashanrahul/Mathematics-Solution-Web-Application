@@ -147,9 +147,17 @@ export default function App() {
         body: JSON.stringify({ question, mode, language }),
       })
       const data = await res.json().catch(() => ({ error: `Server error ${res.status}` }))
+      if (data.aiUnavailable) {
+        setError(data.error || (language === 'si' ? 'AI සේවාව දැනට ලබාගත නොහැක.' : 'AI solving is currently unavailable.'))
+        return
+      }
       if (!res.ok) {
         if (data.noKey) { setNoKey(true); return }
         throw new Error(data.error || `Error ${res.status}: Unable to solve.`)
+      }
+      if (!Array.isArray(data.steps) || typeof data.answer !== 'string') {
+        setError(data.error || (language === 'si' ? 'සම්පූර්ණ විසඳුමක් ලැබුණේ නැත. නැවත උත්සාහ කරන්න.' : 'The solver returned an incomplete response. Please try again.'))
+        return
       }
       setSolution(data)
       setRecent((prev) => [question, ...prev.filter((q) => q !== question)].slice(0, 6))

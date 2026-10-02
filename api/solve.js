@@ -230,7 +230,8 @@ Constraints: steps must have 2-8 items. All fields must be non-empty strings.`
       if (openaiRes.status === 429 || code === 'insufficient_quota') {
         const localSolution = solveLocally(normalized, language, mode)
         if (localSolution) return res.status(200).json(localSolution)
-        return res.status(429).json({
+        return res.status(200).json({
+          aiUnavailable: true,
           error: si
             ? 'OpenAI quota ඉවරයි. සහාය නොදක්වන ගැටලු සඳහා https://platform.openai.com හි billing පරීක්ෂා කරන්න.'
             : 'OpenAI quota exceeded. This question needs AI solving; check billing at https://platform.openai.com.',
