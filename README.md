@@ -17,7 +17,7 @@ For a production-style local run, use `npm start`; this builds the frontend and 
 
 Copy `.env.example` to `.env`, add your OpenAI API key to `OPENAI_API_KEY`, and restart the server. The key stays on the backend and is never sent to the browser. Set `OPENAI_MODEL` to override the default `gpt-5-mini` model.
 
-The local Math.js solver remains authoritative for supported questions; OpenAI can improve their explanations. For questions outside the deterministic solver's coverage, OpenAI can return a solution marked as not independently verified. Without a configured key, the app continues to use the local solver.
+The local Math.js solver remains authoritative for supported questions; OpenAI can improve their explanations. For questions outside the deterministic solver's coverage, OpenAI can return a solution marked as not independently verified. If no key is configured or OpenAI quota is exhausted, the API falls back to local arithmetic, linear equations, percentages, circle area, and rectangle area; unsupported questions still require an available OpenAI quota.
 
 ## Current MVP
 
